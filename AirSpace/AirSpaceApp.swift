@@ -2,7 +2,7 @@
 //  AirSpaceApp.swift
 //  AirSpace
 //
-//  Created by Roshin Nishad on 8/9/25.
+//  Created by Roshin Nishad on 8/8/25.
 //
 
 import SwiftUI
@@ -10,8 +10,8 @@ import SwiftUI
 @main
 struct AirSpaceApp: App {
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        MenuBarExtra("hello", systemImage: "hammer") {
+            
         }
     }
 }
