@@ -8,17 +8,29 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+  var body: some View {
+    Group {
+      VStack(alignment: .leading) {
+        HStack {
+          Text("Welcome to AirSpace.").font(.title2).fontWeight(.bold)
+          Spacer()
+          Image(systemName: "airplane.departure")
+            .font(.system(size: 20))
         }
-        .padding()
-    }
-}
-
-#Preview {
-    ContentView()
+        Divider()
+      }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+      VStack(alignment: .leading) {
+        Button {
+          NSApp.terminate(nil)
+        } label: {
+          Label("Quit AirSpace", systemImage: "").labelStyle(.titleOnly)
+          Spacer()
+          Label("⌘ Q", systemImage: "")
+            .labelStyle(.titleOnly)
+            .foregroundStyle(.tertiary)
+        }
+        .buttonStyle(.plain).keyboardShortcut("q")
+      }.frame(maxWidth: .infinity, alignment: .leading)
+    }.padding(.all, 16)
+  }
 }

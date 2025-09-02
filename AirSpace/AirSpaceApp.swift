@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct AirSpaceApp: App {
-    var body: some Scene {
-        MenuBarExtra("hello", systemImage: "hammer") {
-            
-        }
-    }
+  var body: some Scene {
+    MenuBarExtra {
+      ContentView().frame(width: 350, height: 500)
+    } label: {
+      Label("Desktop 1", systemImage: "").labelStyle(.titleOnly)
+    }.menuBarExtraStyle(.window)
+    
+    #if os(macOS)
+      Settings {
+        ContentView()
+      }
+    #endif
+  }
 }
