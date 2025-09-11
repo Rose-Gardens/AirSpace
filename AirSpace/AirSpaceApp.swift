@@ -11,14 +11,15 @@ import SwiftUI
 struct AirSpaceApp: App {
   var body: some Scene {
     MenuBarExtra {
-      ContentView().frame(width: 350)
+      OnboardingView().frame(width: 350)
     } label: {
       Label("Desktop 1", systemImage: "").labelStyle(.titleOnly)
     }.menuBarExtraStyle(.window)
-    
+
     #if os(macOS)
       Settings {
-        ContentView()
+        SettingsView()
+          .frame(minWidth: 200, maxWidth: 800, minHeight: 400, maxHeight: 1000)
       }
     #endif
   }
