@@ -7,13 +7,24 @@
 
 import SwiftUI
 
+enum Tabs {
+  case general, about
+}
+
 struct SettingsView: View {
+  
+  @State private var selection: Tabs = .general
+  
   var body: some View {
     NavigationSplitView {
-      List {
-        Label("General", systemImage: "gear")
-        Label("About", systemImage: "info.circle")
-      }.listStyle(.sidebar)
+      List(selection: $selection) {
+        NavigationLink(value: Tabs.general) {
+          Label("General", systemImage: "gear")
+        }
+        NavigationLink(value: Tabs.about) {
+          Label("About", systemImage: "info.circle")
+        }
+      }.listStyle(.sidebar).toolbar(removing: .sidebarToggle)
     } detail: {
       Group {
         VStack {

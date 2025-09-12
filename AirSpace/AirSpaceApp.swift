@@ -20,8 +20,7 @@ struct AirSpaceApp: App {
     #if os(macOS)
       Settings {
         SettingsView()
-          .frame(width: 400)
-          .background(.thinMaterial)
+          .frame(width: 800, height: 600)
       }
     #endif
   }

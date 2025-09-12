@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum Screen: Hashable {
-  case onboarding, setup, switcher
+  case onboarding, switcher
 }
 
 struct RootView: View {
@@ -17,13 +17,10 @@ struct RootView: View {
     ZStack {
       switch curScreen {
       case .onboarding:
-        OnboardingView(openSetup: {curScreen = .setup})
+        OnboardingView()
           .transition(.move(edge: .leading))
-      case .setup:
-        SetupView(openOnboarding: {curScreen = .onboarding})
-          .transition(.move(edge: .trailing))
       case .switcher:
-        OnboardingView(openSetup: {curScreen = .setup})
+        OnboardingView()
           .transition(.move(edge: .trailing))
       }
     }.animation(.easeInOut, value: curScreen)
