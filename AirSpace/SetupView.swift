@@ -1,19 +1,20 @@
 //
-//  ContentView.swift
+//  SetupView.swift
 //  AirSpace
 //
-//  Created by Roshin Nishad on 8/9/25.
+//  Created by Roshin Nishad on 9/12/25.
 //
 
 import SwiftUI
 
-struct OnboardingView: View {
+struct SetupView: View {
 
+  let openOnboarding: () -> Void
   @Environment(\.openSettings) private var openSettings
-  let openSetup: () -> Void
 
   var body: some View {
-    let onboardingMenuItems: [MenuItem] = [
+
+    let setupMenuItems: [MenuItem] = [
       .init(
         title: "Preferences",
         shortcutTitle: "⌘ ,",
@@ -35,38 +36,45 @@ struct OnboardingView: View {
     Group {
       VStack {
         HStack {
-          Text("Welcome to AirSpace.")
+          Button {
+            openOnboarding()
+          } label: {
+            Image(systemName: "chevron.backward")
+          }
+          .padding(.trailing, 2)
+          Text("Setup AirSpace.")
             .font(.title2)
             .fontWeight(.bold)
           Spacer()
           Image(systemName: "airplane.departure")
             .font(.system(size: 20))
         }
-        Divider()
-        Text("A Quick Notice")
-          .fontWeight(.semibold)
-          .padding(.vertical, 12)
+        Divider().padding(.bottom, 12)
         VStack(alignment: .leading, spacing: 20) {
           Text(
-            "AirSpace can only detect and switch to spaces that you first visit using macOS."
+            "Navigate to the first desktop space (Desktop 1)."
           )
           .fixedSize(horizontal: false, vertical: true)
           Text(
-            "AirSpace can only detect the removal of a space once you try to visit it."
+            "Press the Start button to begin the setup."
           )
           .fixedSize(horizontal: false, vertical: true)
           Text(
-            "To use AirSpace, you’ll have to go through a quick setup process, by pressing Begin."
+            "Proceed through each subsequent desktop space in order."
+          )
+          .fixedSize(horizontal: false, vertical: true)
+          Text(
+            "Once you have reached the final desktop space, press the Complete button."
           )
           .fixedSize(horizontal: false, vertical: true)
         }
-        Button("Begin Setup") {
-          openSetup()
+        Button("Start") {
+
         }
         .padding(.vertical, 20)
         Spacer()
         Divider().padding(.bottom, 8)
-        MenuPanel(items: onboardingMenuItems)
+        MenuPanel(items: setupMenuItems)
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 
