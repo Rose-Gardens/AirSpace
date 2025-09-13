@@ -27,8 +27,8 @@ struct MenuRow: View {
       .padding(horizontal: 4, vertical: 1)
       .contentShape(Rectangle())
     }
-    .onHover { hovered = $0 }
     .buttonStyle(.plain)
+    .onHover { hovered = $0 }
     .background {
       if hovered {
         EffectMaterial(material: .selection)

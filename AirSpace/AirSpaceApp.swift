@@ -15,12 +15,13 @@ struct AirSpaceApp: App {
         .frame(width: 350)
     } label: {
       Text("Desktop 1")
-    }.menuBarExtraStyle(.window)
+    }
+    .menuBarExtraStyle(.window)
 
     #if os(macOS)
       Settings {
         SettingsView()
-          .frame(width: 800, height: 600)
+          .frame(width: 600)
       }
     #endif
   }

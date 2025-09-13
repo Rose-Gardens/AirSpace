@@ -7,8 +7,8 @@
 
 import SwiftUI
 
+// Child View to OnboardingView
 struct FirstTimeView: View {
-
   @Binding var curContent: Content
 
   var body: some View {

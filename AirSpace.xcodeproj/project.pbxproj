@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		81CF172E2E757B510065D7FA /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 81CF172D2E757B510065D7FA /* LaunchAtLogin */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		817C23C82E47A6B600F80AE7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81CF172E2E757B510065D7FA /* LaunchAtLogin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +96,7 @@
 				817C23BB2E47A6B500F80AE7 /* AirSpace */,
 				817C23CA2E47A6B600F80AE7 /* AirSpaceTests */,
 				817C23D42E47A6B600F80AE7 /* AirSpaceUITests */,
+				81CF172C2E757B510065D7FA /* Frameworks */,
 				817C23BA2E47A6B500F80AE7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,6 +109,13 @@
 				817C23D12E47A6B600F80AE7 /* AirSpaceUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		81CF172C2E757B510065D7FA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,6 +138,7 @@
 			);
 			name = AirSpace;
 			packageProductDependencies = (
+				81CF172D2E757B510065D7FA /* LaunchAtLogin */,
 			);
 			productName = AirSpace;
 			productReference = 817C23B92E47A6B500F80AE7 /* AirSpace.app */;
@@ -209,6 +223,7 @@
 			mainGroup = 817C23B02E47A6B500F80AE7;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				81CF172B2E757B350065D7FA /* XCRemoteSwiftPackageReference "LaunchAtLogin-modern" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 817C23BA2E47A6B500F80AE7 /* Products */;
@@ -578,6 +593,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		81CF172B2E757B350065D7FA /* XCRemoteSwiftPackageReference "LaunchAtLogin-modern" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-modern";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		81CF172D2E757B510065D7FA /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 81CF172B2E757B350065D7FA /* XCRemoteSwiftPackageReference "LaunchAtLogin-modern" */;
+			productName = LaunchAtLogin;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 817C23B12E47A6B500F80AE7 /* Project object */;
 }

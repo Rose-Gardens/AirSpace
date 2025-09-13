@@ -26,7 +26,7 @@ struct OnboardingView: View {
         action: {
           openSettings()
           // Bring settings window to the front after opening.
-          NSApp.activate()
+          NSApp.activate(ignoringOtherApps: true)
         }
       ),
       .init(
@@ -38,53 +38,54 @@ struct OnboardingView: View {
         }
       ),
     ]
+    
+    // ------------ View Returned Below -------------
 
-    Group {
-      VStack {
-        HStack {
-          if isSetup {
-            Button {
-              curContent = .firstTime
-            } label: {
-              Image(systemName: "chevron.backward")
-            }
-            .transition(.opacity)
-            .padding(.trailing, 2)
+    VStack {
+      HStack {
+        if isSetup {
+          Button {
+            curContent = .firstTime
+          } label: {
+            Image(systemName: "chevron.backward")
           }
-          Text(
-            isSetup
-              ? "Setup AirSpace." : "Welcome to AirSpace."
-          )
-          .font(.title2)
-          .fontWeight(.bold)
-          .contentTransition(.opacity)
-          Spacer()
-          Image(systemName: "airplane.departure")
-            .font(.system(size: 20))
+          .transition(.opacity)
+          .padding(.trailing, 2)
         }
-        Divider()
-        ZStack {
-          VStack(spacing: 16) {
-            switch curContent {
-            case .firstTime:
-              FirstTimeView(curContent: $curContent)
-                .transition(.opacity)
-            case .setup:
-              SetupView()
-                .transition(.opacity)
-            }
-          }
-          .padding(.vertical, 16)
-        }
-        .animation(.easeInOut(duration: 0.25), value: curContent)
+        Text(
+          isSetup
+            ? "Setup AirSpace." : "Welcome to AirSpace."
+        )
+        .font(.title2)
+        .fontWeight(.bold)
+        .contentTransition(.opacity)
         Spacer()
-        Divider()
-          .padding(.bottom, 8)
-        MenuPanel(items: onboardingMenuItems)
+        Image(systemName: "airplane.departure")
+          .font(.system(size: 20))
       }
-      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-
+      Divider()
+      ZStack {
+        VStack(spacing: 16) {
+          
+          switch curContent {
+          case .firstTime:
+            FirstTimeView(curContent: $curContent)
+              .transition(.opacity)
+          case .setup:
+            SetupView()
+              .transition(.opacity)
+          }
+          
+        }
+        .padding(.vertical, 16)
+      }
+      .animation(.easeInOut(duration: 0.25), value: curContent)
+      Spacer()
+      Divider()
+        .padding(.bottom, 8)
+      MenuPanel(items: onboardingMenuItems)
     }
+    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     .padding(.all, 16)
   }
 }
