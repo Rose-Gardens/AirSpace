@@ -31,7 +31,7 @@ struct MenuRow: View {
     .onHover { hovered = $0 }
     .background {
       if hovered {
-        EffectMaterial(material: .selection)
+        MenuEffectMaterial(material: .selection)
           .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
           .padding(horizontal: -8, vertical: -4)
       }

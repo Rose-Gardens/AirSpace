@@ -11,7 +11,7 @@ enum Content {
   case firstTime, setup
 }
 
-struct OnboardingView: View {
+struct OnboardingRootView: View {
 
   @Environment(\.openSettings) private var openSettings
   @State private var curContent: Content = .firstTime
@@ -69,10 +69,10 @@ struct OnboardingView: View {
           
           switch curContent {
           case .firstTime:
-            FirstTimeView(curContent: $curContent)
+            OnboardingWelcomeView(curContent: $curContent)
               .transition(.opacity)
           case .setup:
-            SetupView()
+            OnboardingSetupView()
               .transition(.opacity)
           }
           

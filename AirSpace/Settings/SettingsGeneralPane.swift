@@ -8,7 +8,7 @@
 import SwiftUI
 import LaunchAtLogin
 
-struct GeneralView: View {
+struct SettingsGeneralPane: View {
   
   @Binding var isOn: Bool
   

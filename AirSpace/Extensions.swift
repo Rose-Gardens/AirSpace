@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// View: Padding Ext
+// View+Padding
 extension View {
   func padding(horizontal: CGFloat, vertical: CGFloat) -> some View {
     self

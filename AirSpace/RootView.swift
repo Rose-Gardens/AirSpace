@@ -17,10 +17,10 @@ struct RootView: View {
     ZStack {
       switch curScreen {
       case .onboarding:
-        OnboardingView()
+        OnboardingRootView()
           .transition(.move(edge: .leading))
       case .switcher:
-        OnboardingView()
+        OnboardingRootView()
           .transition(.move(edge: .trailing))
       }
     }.animation(.easeInOut, value: curScreen)

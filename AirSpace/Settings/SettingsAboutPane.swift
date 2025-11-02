@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AboutView: View {
+struct SettingsAboutPane: View {
     var body: some View {
       VStack(spacing: 8) {
         Image(systemName: "flower")

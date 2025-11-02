@@ -8,7 +8,7 @@
 import AppKit
 import SwiftUI
 
-struct EffectMaterial: NSViewRepresentable {
+struct MenuEffectMaterial: NSViewRepresentable {
   let material: NSVisualEffectView.Material
   var emphasized: Bool = true
   

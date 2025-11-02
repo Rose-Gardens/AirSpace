@@ -6,21 +6,16 @@
 //
 
 import SwiftUI
+import AppKit
 
 @main
 struct AirSpaceApp: App {
   var body: some Scene {
-    MenuBarExtra {
-      RootView()
-        .frame(width: 350)
-    } label: {
-      Text("Desktop 1")
-    }
-    .menuBarExtraStyle(.window)
-
+    
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var AppDelegate
     #if os(macOS)
       Settings {
-        SettingsView()
+        SettingsRootView()
           .frame(width: 600)
       }
     #endif

@@ -7,23 +7,23 @@
 
 import SwiftUI
 
-enum Tabs: Hashable {
+enum Pane: Hashable {
   case general, about
 }
 
-struct SettingsView: View {
+struct SettingsRootView: View {
 
-  @State private var curTab: Tabs = .general
+  @State private var curPane: Pane = .general
   @State private var visibility: NavigationSplitViewVisibility = .all
   @State private var isOn = UserDefaults.standard.bool(forKey: "login")
 
   var body: some View {
     NavigationSplitView(columnVisibility: $visibility) {
-      List(selection: $curTab) {
-        NavigationLink(value: Tabs.general) {
+      List(selection: $curPane) {
+        NavigationLink(value: Pane.general) {
           Label("General", systemImage: "gearshape")
         }
-        NavigationLink(value: Tabs.about) {
+        NavigationLink(value: Pane.about) {
           Label("About", systemImage: "info.circle")
         }
       }
@@ -32,16 +32,16 @@ struct SettingsView: View {
       .navigationSplitViewColumnWidth(200)
     } detail: {
 
-      switch curTab {
+      switch curPane {
       case .general:
-        GeneralView(isOn: $isOn)
+        SettingsGeneralPane(isOn: $isOn)
       case .about:
-        AboutView()
+        SettingsAboutPane()
       }
 
     }
-    .onChange(of: visibility) { oldState, newState in
-      if newState != .all { visibility = .all }
+    .onChange(of: visibility) {
+      if visibility != .all { visibility = .all }
     }
   }
 }

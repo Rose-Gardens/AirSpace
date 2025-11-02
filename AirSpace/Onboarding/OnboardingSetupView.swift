@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-// Child View to OnboardingView
-struct SetupView: View {
+// Child View to OnboardingRootView
+struct OnboardingSetupView: View {
   var body: some View {
 
     VStack(alignment: .leading, spacing: 20) {
