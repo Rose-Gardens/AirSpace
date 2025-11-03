@@ -26,7 +26,7 @@ struct OnboardingRootView: View {
         action: {
           openSettings()
           // Bring settings window to the front after opening.
-          NSApp.activate(ignoringOtherApps: true)
+          NSApp.activate()
         }
       ),
       .init(

@@ -7,41 +7,66 @@
 
 import Cocoa
 
+class NSPanelWithKey: NSPanel {
+  override var canBecomeKey: Bool {
+    return true
+  }
+}
+
 let statusItem = NSStatusBar.system.statusItem(
   withLength: NSStatusItem.variableLength
 )
 
-var panelView: NSPanel?
+var panelView: NSPanelWithKey?
+let panelSize = NSSize(width: 360, height: 500)
+let screenSize = NSScreen.main?.frame.size ?? .zero
+
+var panelPosCoords: (x: Double, y: Double) {
+  if let statusItemCoords = statusItem.button!.window?.convertToScreen(
+    statusItem.button!.bounds
+  ) {
+    return (
+      x: (statusItemCoords.midX - panelSize.width / 2),
+      y: statusItemCoords.minY
+    )
+  } else {
+    // Center of the screen
+    return (
+      x: (screenSize.width / 2 - panelSize.width / 2),
+      y: (screenSize.height / 2 - panelSize.height / 2)
+    )
+  }
+}
 
 class AppDelegate: NSObject, NSApplicationDelegate {
   func applicationDidFinishLaunching(_ notification: Notification) {
     statusItem.button?.title = "Desktop 1"
     statusItem.button?.action = #selector(showPanel)
+
+    // Close NSPanel if there's a click outside the panel
+    NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDown) { event in
+      self.dismissPanel(using: event.locationInWindow)
+    }
+
   }
 
   @objc func showPanel() {
     guard panelView == nil else {
-      if panelView!.isVisible {
-        panelView!.close()
-      }
-      else {
-        panelView!.orderFrontRegardless()
-      }
+      togglePanel()
       return
     }
-
-    let panelSize = NSSize(width: 360, height: 500)
-    let screenSize = NSScreen.main?.frame.size ?? .zero
-    let statusItemCoords = statusItem.button!.window?.convertToScreen(
-      statusItem.button!.bounds
-    )
     let rect = NSMakeRect(
-      (statusItemCoords?.midX ?? screenSize.width / 2) - panelSize.width / 2,
-      statusItemCoords?.maxY ?? (screenSize.height / 2 - panelSize.height / 2),
+      panelPosCoords.x,
+      panelPosCoords.y,
       panelSize.width,
       panelSize.height
     )
-    panelView = NSPanel(
+    createPanel(with: rect)
+    activatePanelAndBringToFront()
+  }
+
+  func createPanel(with rect: NSRect) {
+    panelView = NSPanelWithKey(
       contentRect: rect,
       styleMask: [
         .borderless,
@@ -56,7 +81,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     panelView?.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
     panelView?.backgroundColor = .clear
     panelView?.contentView = panelBackground()
-    panelView?.orderFrontRegardless()
   }
 
   func panelBackground() -> NSView {
@@ -64,6 +88,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       let visualEffect = NSGlassEffectView()
       visualEffect.cornerRadius = 24
       visualEffect.style = .regular
+      // Added to prevent keyWindow chrome having a different c.radius
+      visualEffect.wantsLayer = true
+      visualEffect.layer?.cornerRadius = 24
       return visualEffect
     } else {
       let visualEffect = NSVisualEffectView()
@@ -75,4 +102,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       return visualEffect
     }
   }
+
+  @objc func togglePanel() {
+    if panelView?.isVisible == true {
+      panelView?.setIsVisible(false)
+    } else {
+      panelView?.setFrameOrigin(
+        CGPoint(
+          x: panelPosCoords.x,
+          y: panelPosCoords.y
+        )
+      )
+      activatePanelAndBringToFront()
+    }
+  }
+
+  func dismissPanel(using position: NSPoint) {
+    if panelView?.frame.contains(position) == true {
+      return
+    }
+    if panelView?.isVisible == true {
+      panelView?.setIsVisible(false)
+    }
+  }
+
+  func activatePanelAndBringToFront() {
+    NSApp.activate()
+    panelView?.makeKeyAndOrderFront(nil)
+  }
+
 }
