@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import SwiftUI
 
 class NSPanelWithKey: NSPanel {
   override var canBecomeKey: Bool {
@@ -18,7 +19,10 @@ let statusItem = NSStatusBar.system.statusItem(
 )
 
 var panelView: NSPanelWithKey?
-let panelSize = NSSize(width: 360, height: 500)
+let panelContentController = NSHostingController(rootView: OnboardingRootView())
+let panelContentView = panelContentController.view
+
+let panelSize = NSSize(width: 392, height: 500)
 let screenSize = NSScreen.main?.frame.size ?? .zero
 
 var panelPosCoords: (x: Double, y: Double) {
@@ -27,7 +31,7 @@ var panelPosCoords: (x: Double, y: Double) {
   ) {
     return (
       x: (statusItemCoords.midX - panelSize.width / 2),
-      y: statusItemCoords.minY
+      y: statusItemCoords.minY - panelSize.height
     )
   } else {
     // Center of the screen
@@ -71,27 +75,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       styleMask: [
         .borderless,
         .fullSizeContentView,
-        .utilityWindow,
         .nonactivatingPanel,
+        .utilityWindow,
       ],
       backing: .buffered,
       defer: false
     )
-    panelView?.level = .floating
-    panelView?.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
-    panelView?.backgroundColor = .clear
-    panelView?.contentView = panelBackground()
+    guard let panel = panelView else { return }
+    panel.level = .floating
+    panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+    panel.backgroundColor = .clear
+    panel.ignoresMouseEvents = false
+    panel.contentView = panelBackgroundAndContent()
   }
 
-  func panelBackground() -> NSView {
-    if #available(macOS 26.0, *) {
+  func panelBackgroundAndContent() -> NSView {
+    // Returns liquid glass as NSPanel background if macOS >= 26, else visEff as fallback
+    if #available(macOS 29.0, *) {
       let visualEffect = NSGlassEffectView()
       visualEffect.cornerRadius = 24
       visualEffect.style = .regular
-      // Added to prevent keyWindow chrome having a different c.radius
+
+      // Added to prevent window chrome from having a different c.radius
       visualEffect.wantsLayer = true
       visualEffect.layer?.cornerRadius = 24
+
+      visualEffect.contentView = panelContentView
       return visualEffect
+
     } else {
       let visualEffect = NSVisualEffectView()
       visualEffect.blendingMode = .behindWindow
@@ -99,8 +110,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       visualEffect.material = .hudWindow
       visualEffect.wantsLayer = true
       visualEffect.layer?.cornerRadius = 24
-      return visualEffect
+      visualEffect.layer?.borderWidth = 0.5
+      visualEffect.layer?.borderColor =
+        NSColor.gray.withAlphaComponent(0.8).cgColor
+      // Removing the panel's shadow as it does not follow the correct c.radius
+      panelView?.hasShadow = false
+      
+      let visualEffectWithContent = setPanelContent(for: visualEffect)
+      return visualEffectWithContent
     }
+  }
+
+  func setPanelContent(for visualEffect: NSView) -> NSView {
+    panelContentView.translatesAutoresizingMaskIntoConstraints = false
+    visualEffect.addSubview(panelContentView)
+
+    panelContentView.leadingAnchor.constraint(
+      equalTo: visualEffect.leadingAnchor
+    ).isActive = true
+    panelContentView.trailingAnchor.constraint(
+      equalTo: visualEffect.trailingAnchor
+    ).isActive = true
+    panelContentView.topAnchor.constraint(equalTo: visualEffect.topAnchor)
+      .isActive = true
+    panelContentView.bottomAnchor
+      .constraint(equalTo: visualEffect.bottomAnchor).isActive = true
+
+    return visualEffect
   }
 
   @objc func togglePanel() {

@@ -31,6 +31,7 @@ struct OnboardingWelcomeView: View {
     Button("Begin Setup") {
       curContent = .setup
     }
+    .padding(.top, 16)
   }
 
 }

@@ -80,12 +80,11 @@ struct OnboardingRootView: View {
         .padding(.vertical, 16)
       }
       .animation(.easeInOut(duration: 0.25), value: curContent)
-      Spacer()
       Divider()
         .padding(.bottom, 8)
       MenuPanel(items: onboardingMenuItems)
     }
-    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+    .frame(maxWidth: 360, alignment: .topLeading)
     .padding(.all, 16)
   }
 }

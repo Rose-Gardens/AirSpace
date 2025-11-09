@@ -32,6 +32,6 @@ struct OnboardingSetupView: View {
     Button("Start") {
 
     }
-
+    .padding(.top, 16)
   }
 }
