@@ -1,41 +1,39 @@
 //
-//  SetupView.swift
+//  OnboardingRecordingView.swift
 //  AirSpace
 //
-//  Created by Roshin Nishad on 9/12/25.
+//  Created by Roshin Nishad on 11/11/25.
 //
 
 import SwiftUI
 
 // Child View to OnboardingRootView
-struct OnboardingSetupView: View {
+struct OnboardingRecordingView: View {
   
-  @Binding var curContent: Content
   @EnvironmentObject var airSpace: AirSpaceMananger
   
   var body: some View {
-
+    
     VStack(alignment: .leading, spacing: 20) {
       Text(
-        "Navigate to the first desktop space (Desktop 1)."
+        "Congrats."
       )
       .fixedSize(horizontal: false, vertical: true)
       Text(
-        "Press the Start button to begin the setup."
+        "Your blood shall be spilt upon this wretched land."
       )
       .fixedSize(horizontal: false, vertical: true)
       Text(
-        "Proceed through each subsequent desktop space in order."
+        "You think of yourself as so precious?"
       )
       .fixedSize(horizontal: false, vertical: true)
       Text(
-        "Once you have reached the final desktop space, press the Complete button."
+        "May your wicked flesh burn as the others had."
       )
       .fixedSize(horizontal: false, vertical: true)
     }
-    Button("Start") {
-      airSpace.isRecordingSetup = true
-      curContent = .recording
+    Button("Stop Recording") {
+      airSpace.isRecordingSetup = false
     }
     .padding(.top, 16)
   }

@@ -23,6 +23,8 @@ struct RootView: View {
         OnboardingRootView()
           .transition(.move(edge: .trailing))
       }
-    }.animation(.easeInOut, value: curScreen)
+    }
+    .animation(.easeInOut, value: curScreen)
+    .environmentObject(AirSpaceMananger.shared)
   }
 }

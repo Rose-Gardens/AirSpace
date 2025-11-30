@@ -19,10 +19,10 @@ let statusItem = NSStatusBar.system.statusItem(
 )
 
 var panelView: NSPanelWithKey?
-let panelContentController = NSHostingController(rootView: OnboardingRootView())
+let panelContentController = NSHostingController(rootView: RootView())
 let panelContentView = panelContentController.view
 
-let panelSize = NSSize(width: 392, height: 500)
+let panelSize = NSSize(width: 360, height: 400)
 let screenSize = NSScreen.main?.frame.size ?? .zero
 
 var panelPosCoords: (x: Double, y: Double) {
@@ -46,11 +46,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   func applicationDidFinishLaunching(_ notification: Notification) {
     statusItem.button?.title = "Desktop 1"
     statusItem.button?.action = #selector(showPanel)
-
+    
+    let airSpace = AirSpaceMananger.shared
+    
     // Close NSPanel if there's a click outside the panel
     NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDown) { event in
       self.dismissPanel(using: event.locationInWindow)
     }
+
+    NSWorkspace.shared.notificationCenter.addObserver(
+      airSpace,
+      selector: #selector(airSpace.orchestrator),
+      name: NSWorkspace.activeSpaceDidChangeNotification,
+      object: nil
+    )
 
   }
 
@@ -115,7 +124,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSColor.gray.withAlphaComponent(0.8).cgColor
       // Removing the panel's shadow as it does not follow the correct c.radius
       panelView?.hasShadow = false
-      
+
       let visualEffectWithContent = setPanelContent(for: visualEffect)
       return visualEffectWithContent
     }
@@ -166,5 +175,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     NSApp.activate()
     panelView?.makeKeyAndOrderFront(nil)
   }
-
+  
 }

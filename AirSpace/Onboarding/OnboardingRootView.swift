@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum Content {
-  case firstTime, setup
+  case firstTime, setup, recording
 }
 
 struct OnboardingRootView: View {
@@ -64,6 +64,7 @@ struct OnboardingRootView: View {
           .font(.system(size: 20))
       }
       Divider()
+      Spacer()
       ZStack {
         VStack(spacing: 16) {
           
@@ -72,7 +73,10 @@ struct OnboardingRootView: View {
             OnboardingWelcomeView(curContent: $curContent)
               .transition(.opacity)
           case .setup:
-            OnboardingSetupView()
+            OnboardingSetupView(curContent: $curContent)
+              .transition(.opacity)
+          case .recording:
+            OnboardingRecordingView()
               .transition(.opacity)
           }
           
@@ -80,11 +84,12 @@ struct OnboardingRootView: View {
         .padding(.vertical, 16)
       }
       .animation(.easeInOut(duration: 0.25), value: curContent)
+      Spacer()
       Divider()
         .padding(.bottom, 8)
       MenuPanel(items: onboardingMenuItems)
     }
-    .frame(maxWidth: 360, alignment: .topLeading)
+    .frame(maxWidth: .infinity, maxHeight: 400, alignment: .topLeading)
     .padding(.all, 16)
   }
 }
