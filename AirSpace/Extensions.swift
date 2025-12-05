@@ -14,4 +14,12 @@ extension View {
       .padding(.horizontal, horizontal)
       .padding(.vertical, vertical)
   }
+
+}
+
+// Collection+isNotEmpty
+extension Collection {
+  var isNotEmpty: Bool {
+    !self.isEmpty
+  }
 }

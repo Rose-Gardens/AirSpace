@@ -2,7 +2,7 @@
 //  SpaceObserver.swift
 //  AirSpace
 //
-//  Created by Roshin Nishad on 9/20/25.
+//  Created by Hazel Nishad 🏳️‍⚧️ on 9/20/25.
 //
 
 import AppKit
@@ -32,13 +32,13 @@ final class AirSpaceMananger: ObservableObject {
   // Called everytime there is a space change notification
   @objc func orchestrator() {
 
-    // TODO: Check if in setup mode or current space not in dict here
+    // TODO: Check if in recording mode or current space not in dict here
     createSpaceRecord()
   }
 
-  func createDisplayRef() -> String {
+  private func createDisplayRef() -> String {
     let currentDisplayID = NSScreen.main?.localizedName ?? "Display-Main"
-    if self.spaceListPerDisplay[currentDisplayID] != nil {
+    if self.spaceListPerDisplay.keys.contains(currentDisplayID) {
       return currentDisplayID
     }
     self.spaceListPerDisplay[currentDisplayID] = []
@@ -49,24 +49,31 @@ final class AirSpaceMananger: ObservableObject {
     // Everytime we create a new space, we first check if its in a new display, else use cur. display
     let currentDisplayID = createDisplayRef()
     // Get number of spaces based on the number of Space Records in that display, else 0
-    let numID = self.spaceListPerDisplay[currentDisplayID]?.count ?? 0
+    let currentIndex = self.spaceListPerDisplay[currentDisplayID]?.count ?? 0
     if self.isRecordingSetup {
+
+      // TODO: Update lastSeen on spaceChangeNotif, but we'll need window anchors first
+
       self.spaceListPerDisplay[currentDisplayID]?
         .append(
           SpaceRecord(
             id: UUID(),
-            numericalId: numID + 1,
-            customName: "Desktop \(numID + 1)",
+            numericalId: currentIndex + 1,
+            customName: "Desktop \(currentIndex + 1)",
             firstSeen: Date(),
             lastSeen: nil
           )
         )
     }
-    // TODO: if we are on a new space without an anchor window, create one
+    // TODO: if we are on a new space without an anchor window when not recording, create one
   }
 
   func createWindowAnchor() {
-
+    
+  }
+  
+  func updateLastSeen() {
+    
   }
 
 }

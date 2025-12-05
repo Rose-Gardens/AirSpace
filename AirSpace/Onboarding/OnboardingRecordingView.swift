@@ -9,11 +9,12 @@ import SwiftUI
 
 // Child View to OnboardingRootView
 struct OnboardingRecordingView: View {
-  
+  @Binding var curContent: Content
+
   @EnvironmentObject var airSpace: AirSpaceMananger
-  
+
   var body: some View {
-    
+
     VStack(alignment: .leading, spacing: 20) {
       Text(
         "Congrats."
@@ -34,6 +35,8 @@ struct OnboardingRecordingView: View {
     }
     Button("Stop Recording") {
       airSpace.isRecordingSetup = false
+      curContent = .setup
+      print(airSpace.spaceListPerDisplay)
     }
     .padding(.top, 16)
   }

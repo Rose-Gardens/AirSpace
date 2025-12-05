@@ -36,6 +36,8 @@ struct OnboardingSetupView: View {
     Button("Start") {
       airSpace.isRecordingSetup = true
       curContent = .recording
+      // Create the first SpaceRecord for the initial Space (no notif yet)
+        airSpace.createSpaceRecord()
     }
     .padding(.top, 16)
   }

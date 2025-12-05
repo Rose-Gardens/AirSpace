@@ -38,7 +38,7 @@ struct OnboardingRootView: View {
         }
       ),
     ]
-    
+
     // ------------ View Returned Below -------------
 
     VStack {
@@ -67,7 +67,7 @@ struct OnboardingRootView: View {
       Spacer()
       ZStack {
         VStack(spacing: 16) {
-          
+
           switch curContent {
           case .firstTime:
             OnboardingWelcomeView(curContent: $curContent)
@@ -76,10 +76,10 @@ struct OnboardingRootView: View {
             OnboardingSetupView(curContent: $curContent)
               .transition(.opacity)
           case .recording:
-            OnboardingRecordingView()
+            OnboardingRecordingView(curContent: $curContent)
               .transition(.opacity)
           }
-          
+
         }
         .padding(.vertical, 16)
       }
