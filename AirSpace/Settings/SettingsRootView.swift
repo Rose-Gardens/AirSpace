@@ -2,7 +2,7 @@
 //  SettingsView.swift
 //  AirSpace
 //
-//  Created by Roshin Nishad on 9/11/25.
+//  Created by Hazel Nishad on 9/11/25.
 //
 
 import SwiftUI
@@ -15,7 +15,6 @@ struct SettingsRootView: View {
 
   @State private var curPane: Pane = .general
   @State private var visibility: NavigationSplitViewVisibility = .all
-  @State private var isOn = UserDefaults.standard.bool(forKey: "login")
 
   var body: some View {
     NavigationSplitView(columnVisibility: $visibility) {
@@ -34,7 +33,7 @@ struct SettingsRootView: View {
 
       switch curPane {
       case .general:
-        SettingsGeneralPane(isOn: $isOn)
+        SettingsGeneralPane()
       case .about:
         SettingsAboutPane()
       }
@@ -43,5 +42,6 @@ struct SettingsRootView: View {
     .onChange(of: visibility) {
       if visibility != .all { visibility = .all }
     }
+    .environmentObject(AppSettings.shared)
   }
 }
