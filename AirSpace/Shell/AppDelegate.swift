@@ -19,7 +19,9 @@ let statusItem = NSStatusBar.system.statusItem(
 )
 
 var panelView: NSPanelWithKey?
-let panelContentController = NSHostingController(rootView: RootView())
+let panelContentController = NSHostingController(
+  rootView: RootView()
+)
 let panelContentView = panelContentController.view
 
 let panelSize = NSSize(width: 360, height: 400)
@@ -43,31 +45,47 @@ var panelPosCoords: (x: Double, y: Double) {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+
+  var airSpace: AirSpaceMananger!
+
   func applicationDidFinishLaunching(_ notification: Notification) {
     
     let appSettings = AppSettings.shared
-    appSettings.registerUserDefaults()
+    airSpace = AirSpaceMananger.shared
+
+    // Trans affirmations on start-up 😌💖🏳️‍⚧️
+    transCutie()
+    airSpace.transPride(with: "🏳️‍⚧️")
     
-    statusItem.button?.title = "Desktop 1"
+    appSettings.registerUserDefaults()
+    airSpace.loadRecordsFromDisk()
+
+    statusItem.button?.title = "AirSpace..."
     statusItem.button?.action = #selector(showPanel)
 
-    let airSpace = AirSpaceMananger.shared
-
+    // MARK: Attaching didResignKeyNotif in createPanel makes below redundant
     // Close NSPanel if there's a click outside the panel
-    NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDown) { event in
-      self.dismissPanel(using: event.locationInWindow)
-    }
+    //    NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDown) { event in
+    //      self.dismissPanel(using: event.locationInWindow)
+    //    }
 
     NSWorkspace.shared.notificationCenter.addObserver(
-      airSpace,
+      self,
       selector: #selector(
-        airSpace.onSpaceChange
+        spaceChangeHandler
       ),
       name: NSWorkspace.activeSpaceDidChangeNotification,
-      object: nil
+      object: nil,
     )
-    
+
     appSettings.loadSettings()
+  }
+
+  @objc func spaceChangeHandler() {
+    Task { @MainActor in
+      guard let spaceRecord = airSpace.onSpaceChange() else { return }
+      statusItem.button?.title = spaceRecord.customName
+    }
   }
 
   @objc func showPanel() {
@@ -98,6 +116,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       defer: false
     )
     guard let panel = panelView else { return }
+    attachResignKeyNotifToPanel(for: panel)
+
     panel.level = .floating
     panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
     panel.backgroundColor = .clear
@@ -155,6 +175,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     return visualEffect
   }
 
+  func attachResignKeyNotifToPanel(for panel: NSPanelWithKey) {
+    NotificationCenter.default.addObserver(
+      forName: NSWindow.didResignKeyNotification,
+      object: panel,
+      queue: nil
+    ) { _ in
+      self.dismissPanel(using: nil)
+    }
+  }
+
   @objc func togglePanel() {
     if panelView?.isVisible == true {
       panelView?.setIsVisible(false)
@@ -169,9 +199,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
   }
 
-  func dismissPanel(using position: NSPoint) {
-    if panelView?.frame.contains(position) == true {
-      return
+  func dismissPanel(using position: NSPoint?) {
+    if let mouseClickPos = position {
+      if panelView?.frame.contains(mouseClickPos) == true {
+        return
+      }
     }
     if panelView?.isVisible == true {
       panelView?.setIsVisible(false)
@@ -181,6 +213,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   func activatePanelAndBringToFront() {
     NSApp.activate()
     panelView?.makeKeyAndOrderFront(nil)
+  }
+
+  @objc func transCutie() {
+    print("I'm a trans cutie-pie! 🏳️‍⚧️😌💖")
   }
 
 }

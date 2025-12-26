@@ -25,9 +25,8 @@ struct OnboardingRootView: View {
         shortcutTitle: "⌘ ,",
         shortcut: KeyEquivalent(","),
         action: {
-          // NSApp means NSApplication.shared
-          // TODO: Figure out how to dismiss NSPanel when opening settings
           openSettings()
+          // NSApp means NSApplication.shared
           // Bring settings window to the front after opening.
           NSApp.activate()
         }

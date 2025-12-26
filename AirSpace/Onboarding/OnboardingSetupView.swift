@@ -37,6 +37,7 @@ struct OnboardingSetupView: View {
       airSpace.isRecording = true
       curContent = .recording
       // Create the first SpaceRecord for the initial Space (no notif yet)
+      // TODO: THIS should call the handlespacechange from appdelegate... somehow
       airSpace.onSpaceChange()
     }
     .padding(.top, 16)

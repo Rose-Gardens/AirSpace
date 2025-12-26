@@ -18,34 +18,35 @@ final class AirSpaceMananger: NSObject, ObservableObject {
   static let shared = AirSpaceMananger(
     isRecording: false,
     spaceListPerDisplay: [:],
-    anchorsPerSpace: [:]
+    spacePerAnchor: [:]
   )
 
   // The properties of the class ----
   var isRecording: Bool
   var spaceListPerDisplay: [DisplayID: [SpaceRecord]]  // The Main List of Spaces
-  var anchorsPerSpace: [SpaceID: WindowModel?]
+  var spacePerAnchor: [NSWindow?: Int]
 
   // The constructor of the class (accessed only by 'shared') ----
   private init(
     isRecording: Bool,
     spaceListPerDisplay: [DisplayID: [SpaceRecord]],
-    anchorsPerSpace: [SpaceID: WindowModel?]
+    spacePerAnchor: [NSWindow?: Int]
   ) {
     self.isRecording = isRecording
     self.spaceListPerDisplay = spaceListPerDisplay
-    self.anchorsPerSpace = anchorsPerSpace
+    self.spacePerAnchor = spacePerAnchor
   }
 
   // ! The space change notification entry point ----
-  @objc func onSpaceChange() {
-    transPride(with: "🏳️‍⚧️")
-
+  @discardableResult
+  func onSpaceChange() -> SpaceRecord? {
     if shouldCreateSpaceRecord() {
       createSpaceRecord()
     }
-    
     dealWith2ormoreAnchorsInSpace()
+    
+    guard let spaceRecord = getRecordOfActiveSpace() else { return nil }
+    return spaceRecord
   }
 
   // --------------- *Methods of AirSpace* ----------------
@@ -92,8 +93,8 @@ final class AirSpaceMananger: NSObject, ObservableObject {
           lastSeen: nil
         )
       )
-    if let anchorWindow = createWindowAnchor(spaceID: lastSpaceIndex) {
-      self.anchorsPerSpace[newSpaceID] = anchorWindow
+    if let anchorWindow = createWindowAnchor(at: lastSpaceIndex) {
+      self.spacePerAnchor[anchorWindow] = lastSpaceIndex
     }
 
     if isNormalModeSpaceRecord {
@@ -101,7 +102,7 @@ final class AirSpaceMananger: NSObject, ObservableObject {
     }
   }
 
-  func createWindowAnchor(spaceID: Int) -> WindowModel? {
+  func createWindowAnchor(at spaceIndex: Int) -> NSWindow? {
     guard getActiveSpaceWindows().count == 0 else { return nil }
     let anchorWindow = NSWindow(
       contentRect: NSRect(
@@ -131,9 +132,9 @@ final class AirSpaceMananger: NSObject, ObservableObject {
         throw AppError.anchorWindowNotCreatedError
       }
     } catch {
-      print("\(error.localizedDescription): for space \(spaceID)")
+      print("\(error.localizedDescription): for space \(spaceIndex)")
     }
-    return WindowModel(spaceID: spaceID, window: anchorWindow)
+    return anchorWindow
   }
 
   func updateLastSeen() {
@@ -149,6 +150,14 @@ final class AirSpaceMananger: NSObject, ObservableObject {
     }
     return airSpaceWindowsInActiveSpace
 
+  }
+
+  func getRecordOfActiveSpace() -> SpaceRecord? {
+    guard let anchor = getActiveSpaceWindows().first else { return nil }
+    guard let spaceIndex = spacePerAnchor[anchor] else { return nil }
+    guard let spaceRecordList = spaceListPerDisplay[getCurrentDisplayID()]
+    else { return nil }
+    return spaceRecordList[spaceIndex]
   }
 
   func getDiskSavePath() throws -> URL {
@@ -192,12 +201,12 @@ final class AirSpaceMananger: NSObject, ObservableObject {
         throw AppError.cantConvertStringToJson
       }
       let json = try JSON(data: dataFromString)
-      
+
       // TODO: DOES THIS LINE OF CODE WORK AS EXPECTED???
       if json.isEmpty {
         return
       }
-      
+
       var tempSpaceListPerDisplay: [DisplayID: [SpaceRecord]] = [:]
       for (key, subJson): (String, JSON) in json {
         tempSpaceListPerDisplay[key] = []
@@ -208,7 +217,8 @@ final class AirSpaceMananger: NSObject, ObservableObject {
               numericalId: recordJson["numericalId"].intValue,
               customName: recordJson["customName"].stringValue,
               firstSeen: Date(
-                timeIntervalSinceReferenceDate: recordJson["firstSeen"].doubleValue
+                timeIntervalSinceReferenceDate: recordJson["firstSeen"]
+                  .doubleValue
               ),
               lastSeen: nil
             )

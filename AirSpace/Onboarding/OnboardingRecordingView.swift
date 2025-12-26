@@ -43,7 +43,7 @@ struct OnboardingRecordingView: View {
 
       curContent = .setup
       print(airSpace.spaceListPerDisplay)
-      print(airSpace.anchorsPerSpace)
+      print(airSpace.spacePerAnchor)
     }
     .padding(.top, 16)
   }
