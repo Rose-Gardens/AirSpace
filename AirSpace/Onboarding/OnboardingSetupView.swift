@@ -2,17 +2,17 @@
 //  SetupView.swift
 //  AirSpace
 //
-//  Created by Roshin Nishad on 9/12/25.
+//  Created by Hazel Nishad on 9/12/25.
 //
 
 import SwiftUI
 
 // Child View to OnboardingRootView
 struct OnboardingSetupView: View {
-  
+
   @Binding var curContent: Content
   @EnvironmentObject var airSpace: AirSpaceMananger
-  
+
   var body: some View {
 
     VStack(alignment: .leading, spacing: 20) {
@@ -34,10 +34,10 @@ struct OnboardingSetupView: View {
       .fixedSize(horizontal: false, vertical: true)
     }
     Button("Start") {
-      airSpace.isRecordingSetup = true
+      airSpace.isRecording = true
       curContent = .recording
       // Create the first SpaceRecord for the initial Space (no notif yet)
-        airSpace.createSpaceRecord()
+      airSpace.onSpaceChange()
     }
     .padding(.top, 16)
   }
