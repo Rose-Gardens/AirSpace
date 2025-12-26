@@ -2,10 +2,10 @@
 //  SpaceModel.swift
 //  AirSpace
 //
-//  Created by Roshin Nishad on 11/11/25.
+//  Created by Hazel Nishad on 11/11/25.
 //
 
-import Foundation
+import AppKit
 
 struct SpaceRecord: Identifiable, Codable {
   let id: UUID
