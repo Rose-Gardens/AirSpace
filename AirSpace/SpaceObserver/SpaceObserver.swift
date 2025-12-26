@@ -12,7 +12,7 @@ typealias DisplayID = String
 typealias SpaceID = UUID
 
 @MainActor
-final class AirSpaceMananger: ObservableObject {
+final class AirSpaceMananger: NSObject, ObservableObject {
 
   // The singleton shared object ----
   static let shared = AirSpaceMananger(
@@ -39,12 +39,12 @@ final class AirSpaceMananger: ObservableObject {
 
   // ! The space change notification entry point ----
   @objc func onSpaceChange() {
-    loadRecordsFromDisk()
     transPride(with: "🏳️‍⚧️")
 
     if shouldCreateSpaceRecord() {
       createSpaceRecord()
     }
+    
     dealWith2ormoreAnchorsInSpace()
   }
 
@@ -127,7 +127,7 @@ final class AirSpaceMananger: ObservableObject {
     //    anchorWindow.hasShadow = false
     anchorWindow.orderFrontRegardless()
     do {
-      guard getActiveSpaceWindows().count == 0 else {
+      guard getActiveSpaceWindows().count == 1 else {
         throw AppError.anchorWindowNotCreatedError
       }
     } catch {

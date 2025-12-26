@@ -1,5 +1,5 @@
 //
-//  SetupView.swift
+//  OnboardingSetupView.swift
 //  AirSpace
 //
 //  Created by Hazel Nishad on 9/12/25.

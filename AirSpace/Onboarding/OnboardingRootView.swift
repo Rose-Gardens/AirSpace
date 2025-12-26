@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  OnboardingRootView.swift
 //  AirSpace
 //
 //  Created by Hazel Nishad on 8/9/25.
@@ -14,6 +14,7 @@ enum Content {
 struct OnboardingRootView: View {
 
   @Environment(\.openSettings) private var openSettings
+  
   @State private var curContent: Content = .firstTime
 
   var body: some View {
@@ -24,6 +25,8 @@ struct OnboardingRootView: View {
         shortcutTitle: "⌘ ,",
         shortcut: KeyEquivalent(","),
         action: {
+          // NSApp means NSApplication.shared
+          // TODO: Figure out how to dismiss NSPanel when opening settings
           openSettings()
           // Bring settings window to the front after opening.
           NSApp.activate()
