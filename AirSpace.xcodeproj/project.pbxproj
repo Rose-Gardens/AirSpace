@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		819DA58C2EFD39F7004C14BF /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 819DA58B2EFD39F7004C14BF /* SwiftyJSON */; };
 		81CF172E2E757B510065D7FA /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 81CF172D2E757B510065D7FA /* LaunchAtLogin */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				819DA58C2EFD39F7004C14BF /* SwiftyJSON in Frameworks */,
 				81CF172E2E757B510065D7FA /* LaunchAtLogin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -139,6 +141,7 @@
 			name = AirSpace;
 			packageProductDependencies = (
 				81CF172D2E757B510065D7FA /* LaunchAtLogin */,
+				819DA58B2EFD39F7004C14BF /* SwiftyJSON */,
 			);
 			productName = AirSpace;
 			productReference = 817C23B92E47A6B500F80AE7 /* AirSpace.app */;
@@ -224,6 +227,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				81CF172B2E757B350065D7FA /* XCRemoteSwiftPackageReference "LaunchAtLogin-modern" */,
+				819DA58A2EFD39F7004C14BF /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 817C23BA2E47A6B500F80AE7 /* Products */;
@@ -595,6 +599,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		819DA58A2EFD39F7004C14BF /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
 		81CF172B2E757B350065D7FA /* XCRemoteSwiftPackageReference "LaunchAtLogin-modern" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-modern";
@@ -606,6 +618,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		819DA58B2EFD39F7004C14BF /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 819DA58A2EFD39F7004C14BF /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
 		81CF172D2E757B510065D7FA /* LaunchAtLogin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 81CF172B2E757B350065D7FA /* XCRemoteSwiftPackageReference "LaunchAtLogin-modern" */;

@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  AirSpace
 //
-//  Created by Roshin Nishad on 9/12/25.
+//  Created by Hazel Nishad on 9/12/25.
 //
 
 import SwiftUI
@@ -26,5 +26,6 @@ struct RootView: View {
     }
     .animation(.easeInOut, value: curScreen)
     .environmentObject(AirSpaceMananger.shared)
+    .environmentObject(AppSettings.shared)
   }
 }

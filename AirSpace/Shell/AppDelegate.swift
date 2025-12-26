@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  AirSpace
 //
-//  Created by Roshin Nishad on 10/19/25.
+//  Created by Hazel Nishad on 10/19/25.
 //
 
 import Cocoa
@@ -44,11 +44,15 @@ var panelPosCoords: (x: Double, y: Double) {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
   func applicationDidFinishLaunching(_ notification: Notification) {
+    
+    let appSettings = AppSettings.shared
+    appSettings.registerUserDefaults()
+    
     statusItem.button?.title = "Desktop 1"
     statusItem.button?.action = #selector(showPanel)
-    
+
     let airSpace = AirSpaceMananger.shared
-    
+
     // Close NSPanel if there's a click outside the panel
     NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDown) { event in
       self.dismissPanel(using: event.locationInWindow)
@@ -56,11 +60,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     NSWorkspace.shared.notificationCenter.addObserver(
       airSpace,
-      selector: #selector(airSpace.orchestrator),
+      selector: #selector(
+        airSpace.onSpaceChange
+      ),
       name: NSWorkspace.activeSpaceDidChangeNotification,
       object: nil
     )
-
+    
+    appSettings.loadSettings()
   }
 
   @objc func showPanel() {
@@ -175,5 +182,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     NSApp.activate()
     panelView?.makeKeyAndOrderFront(nil)
   }
-  
+
 }

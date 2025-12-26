@@ -2,7 +2,7 @@
 //  OnboardingRecordingView.swift
 //  AirSpace
 //
-//  Created by Roshin Nishad on 11/11/25.
+//  Created by Hazel Nishad on 11/11/25.
 //
 
 import SwiftUI
@@ -12,31 +12,38 @@ struct OnboardingRecordingView: View {
   @Binding var curContent: Content
 
   @EnvironmentObject var airSpace: AirSpaceMananger
+  @EnvironmentObject var appSettings: AppSettings
 
   var body: some View {
 
     VStack(alignment: .leading, spacing: 20) {
       Text(
-        "Congrats."
+        "Welcome to AirSpace, Hazeline!"
       )
       .fixedSize(horizontal: false, vertical: true)
       Text(
-        "Your blood shall be spilt upon this wretched land."
+        "You’ve made it here, even on the hard days."
       )
       .fixedSize(horizontal: false, vertical: true)
       Text(
-        "You think of yourself as so precious?"
+        "Let’s make this desktop a tiny kingdom just for you. 👑🌙"
       )
       .fixedSize(horizontal: false, vertical: true)
       Text(
-        "May your wicked flesh burn as the others had."
+        "I’m glad you’re still here, hazelbun 🥺💖🕊️"
       )
       .fixedSize(horizontal: false, vertical: true)
     }
     Button("Stop Recording") {
-      airSpace.isRecordingSetup = false
+      airSpace.isRecording = false
+      if appSettings.isFirstTimeSetup {
+        appSettings.isFirstTimeSetup = false
+      }
+      airSpace.saveRecordsToDisk()
+
       curContent = .setup
       print(airSpace.spaceListPerDisplay)
+      print(airSpace.anchorsPerSpace)
     }
     .padding(.top, 16)
   }
