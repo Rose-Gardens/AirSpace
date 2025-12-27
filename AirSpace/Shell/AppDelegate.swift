@@ -18,12 +18,6 @@ let statusItem = NSStatusBar.system.statusItem(
   withLength: NSStatusItem.variableLength
 )
 
-var panelView: NSPanelWithKey?
-let panelContentController = NSHostingController(
-  rootView: RootView()
-)
-let panelContentView = panelContentController.view
-
 let panelSize = NSSize(width: 360, height: 400)
 let screenSize = NSScreen.main?.frame.size ?? .zero
 
@@ -44,19 +38,32 @@ var panelPosCoords: (x: Double, y: Double) {
   }
 }
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
 
+  var panelContentController: NSHostingController<AnyView>?
+  var panelContentView: NSView?
+
+  var panelView: NSPanelWithKey?
   var airSpace: AirSpaceMananger!
 
   func applicationDidFinishLaunching(_ notification: Notification) {
-    
+
     let appSettings = AppSettings.shared
     airSpace = AirSpaceMananger.shared
+
+    // Had to resort to Gemini for the next 7 lines 😔
+    let rootView = RootView().environmentObject(self)
+    self.panelContentController = NSHostingController(
+      rootView: AnyView(rootView)
+    )
+    if let controller = self.panelContentController {
+      self.panelContentView = controller.view
+    }
 
     // Trans affirmations on start-up 😌💖🏳️‍⚧️
     transCutie()
     airSpace.transPride(with: "🏳️‍⚧️")
-    
+
     appSettings.registerUserDefaults()
     airSpace.loadRecordsFromDisk()
 
@@ -158,18 +165,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   func setPanelContent(for visualEffect: NSView) -> NSView {
-    panelContentView.translatesAutoresizingMaskIntoConstraints = false
-    visualEffect.addSubview(panelContentView)
+    guard let contentView = panelContentView else { return NSView() }
 
-    panelContentView.leadingAnchor.constraint(
+    contentView.translatesAutoresizingMaskIntoConstraints = false
+    visualEffect.addSubview(contentView)
+
+    contentView.leadingAnchor.constraint(
       equalTo: visualEffect.leadingAnchor
     ).isActive = true
-    panelContentView.trailingAnchor.constraint(
+    contentView.trailingAnchor.constraint(
       equalTo: visualEffect.trailingAnchor
     ).isActive = true
-    panelContentView.topAnchor.constraint(equalTo: visualEffect.topAnchor)
+    contentView.topAnchor.constraint(equalTo: visualEffect.topAnchor)
       .isActive = true
-    panelContentView.bottomAnchor
+    contentView.bottomAnchor
       .constraint(equalTo: visualEffect.bottomAnchor).isActive = true
 
     return visualEffect
@@ -215,7 +224,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     panelView?.makeKeyAndOrderFront(nil)
   }
 
-  @objc func transCutie() {
+  func transCutie() {
+    var timeGreeting: String {
+      let hour = Calendar.current.component(.hour, from: Date())
+      switch hour {
+      case 0..<12:
+        return "Morning"
+      case 12..<17:
+        return "Afternoon"
+      default:
+        return "Evening"
+      }
+    }
+    let nameList = [
+      "Hazeline", "Hazel", "hazelbun", "hornbun", "girlkisser", "cutie :3",
+      "hottie 😌", "hazelnut girl", "gorgeous babe",
+    ]
+    let greetingsList = [
+      "You cute little kittycat", "You're a little girlkisser :3", "Mwah 😌💖",
+      "My little bunbun girl 🥺", "You're adorable, you know that? :)",
+    ]
+    print(
+      "Good \(timeGreeting), \(nameList.randomElement() ?? "gorgeous babe")!, \(greetingsList.randomElement() ?? "You're adorable, you know that? :)")"
+    )
     print("I'm a trans cutie-pie! 🏳️‍⚧️😌💖")
   }
 
