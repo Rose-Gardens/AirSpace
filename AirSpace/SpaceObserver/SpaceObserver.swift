@@ -12,7 +12,7 @@ typealias DisplayID = String
 typealias SpaceID = UUID
 
 @MainActor
-final class AirSpaceMananger: NSObject, ObservableObject {
+final class AirSpaceMananger: ObservableObject {
 
   // The singleton shared object ----
   static let shared = AirSpaceMananger(

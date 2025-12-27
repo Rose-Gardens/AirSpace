@@ -5,14 +5,14 @@
 //  Created by Hazel Nishad on 8/8/25.
 //
 
-import SwiftUI
 import AppKit
+import SwiftUI
 
 @main
 struct AirSpaceApp: App {
+  @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
+  
   var body: some Scene {
-    
-    @NSApplicationDelegateAdaptor(AppDelegate.self) var AppDelegate
     #if os(macOS)
       Settings {
         SettingsRootView()

@@ -11,8 +11,8 @@ import SwiftUI
 struct OnboardingRecordingView: View {
   @Binding var curContent: Content
 
-  @EnvironmentObject var airSpace: AirSpaceMananger
-  @EnvironmentObject var appSettings: AppSettings
+  @EnvironmentObject private var airSpace: AirSpaceMananger
+  @EnvironmentObject private var appSettings: AppSettings
 
   var body: some View {
 
