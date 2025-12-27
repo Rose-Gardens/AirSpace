@@ -12,9 +12,10 @@ struct SettingsToggle: View {
   let settingDescription: String
   let isOn: Binding<Bool>
   let onChange: Bool
-  let closure: () -> Void
+  let doOnChange: () -> Void
 
   var body: some View {
+    // TODO: Add subtext to toggle text
     HStack {
       Text(settingDescription)
       Spacer()
@@ -22,7 +23,7 @@ struct SettingsToggle: View {
         .toggleStyle(.switch)
         .labelsHidden()
         .onChange(of: onChange, initial: true) {
-          closure()
+          doOnChange()
         }
     }
   }

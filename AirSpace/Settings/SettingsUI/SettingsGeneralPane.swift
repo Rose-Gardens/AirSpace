@@ -27,7 +27,7 @@ struct SettingsGeneralPane: View {
             "Automatically Create Record When Not In Setup Mode",
           isOn: $appSettings.willAutoCreateRecordInNormalMode,
           onChange: appSettings.willAutoCreateRecordInNormalMode,
-          closure: {print(appSettings.willAutoCreateRecordInNormalMode)}
+          doOnChange: {}
         )
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
