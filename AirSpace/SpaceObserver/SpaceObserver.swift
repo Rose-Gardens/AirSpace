@@ -238,6 +238,6 @@ final class AirSpaceMananger: ObservableObject {
   }
 
   func transPride(with flag: String) {
-    print("Hazeline, Trans Girlie Forever! \(flag)✨💖")
+    print("Hazeline, trans girlie forever! \(flag)✨💖")
   }
 }

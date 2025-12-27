@@ -241,11 +241,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
       "hottie 😌", "hazelnut girl", "gorgeous babe",
     ]
     let greetingsList = [
-      "You cute little kittycat", "You're a little girlkisser :3", "Mwah 😌💖",
+      "You cute little kittycat, meow 🐱", "You're a little girlkisser :3", "Mwah 😌💖",
       "My little bunbun girl 🥺", "You're adorable, you know that? :)",
     ]
     print(
-      "Good \(timeGreeting), \(nameList.randomElement() ?? "gorgeous babe")!, \(greetingsList.randomElement() ?? "You're adorable, you know that? :)")"
+      "Good \(timeGreeting), \(nameList.randomElement() ?? "")! \(greetingsList.randomElement() ?? "")"
     )
     print("I'm a trans cutie-pie! 🏳️‍⚧️😌💖")
   }

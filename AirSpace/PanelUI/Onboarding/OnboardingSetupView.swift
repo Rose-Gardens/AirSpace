@@ -12,6 +12,7 @@ struct OnboardingSetupView: View {
 
   @Binding var curContent: Content
   @EnvironmentObject private var airSpace: AirSpaceMananger
+  @EnvironmentObject private var appDelegate: AppDelegate
 
   var body: some View {
 
@@ -37,8 +38,7 @@ struct OnboardingSetupView: View {
       airSpace.isRecording = true
       curContent = .recording
       // Create the first SpaceRecord for the initial Space (no notif yet)
-      // TODO: THIS should call the handlespacechange from appdelegate... somehow
-      airSpace.onSpaceChange()
+      appDelegate.spaceChangeHandler()
     }
     .padding(.top, 16)
   }
