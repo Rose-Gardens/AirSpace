@@ -45,6 +45,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
 
   var panelView: NSPanelWithKey?
   var airSpace: AirSpaceMananger!
+  
+  @Published var rootViewState: Screen = .onboarding
 
   func applicationDidFinishLaunching(_ notification: Notification) {
 
@@ -65,7 +67,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     airSpace.transPride(with: "🏳️‍⚧️")
 
     appSettings.registerUserDefaults()
-    airSpace.loadRecordsFromDisk()
+    loadDiskData()
 
     statusItem.button?.title = "AirSpace..."
     statusItem.button?.action = #selector(showPanel)
@@ -92,6 +94,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     Task { @MainActor in
       guard let spaceRecord = airSpace.onSpaceChange() else { return }
       statusItem.button?.title = spaceRecord.customName
+    }
+  }
+
+  func loadDiskData() {
+    Task { @MainActor in
+      if airSpace.checkIfDiskDataExists() {
+        airSpace.loadRecordsFromDisk()
+        self.rootViewState = .repairAnchor
+        //INSTRUCTIONS:
+        // We need to change rootView to a "Repair Anchors" screen
+      } else {
+        print("No records.json exists. User will need to do a clean setup.")
+      }
     }
   }
 
@@ -237,11 +252,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
       }
     }
     let nameList = [
-      "Hazeline", "Hazel", "hazelbun", "hornbun", "girlkisser", "cutie :3",
+      "Hazeline", "Hazel", "hazelbun", "hornbun", "girlkissing hazelnut",
+      "cutie :3",
       "hottie 😌", "hazelnut girl", "gorgeous babe",
     ]
     let greetingsList = [
-      "You cute little kittycat, meow 🐱", "You're a little girlkisser :3", "Mwah 😌💖",
+      "You cute little kittycat, meow 🐱", "You're a little girlkisser :3",
+      "Mwah 😌💖",
       "My little bunbun girl 🥺", "You're adorable, you know that? :)",
     ]
     print(

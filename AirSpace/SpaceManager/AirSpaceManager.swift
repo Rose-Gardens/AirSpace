@@ -44,7 +44,7 @@ final class AirSpaceMananger: ObservableObject {
       createSpaceRecord()
     }
     dealWith2ormoreAnchorsInSpace()
-    
+
     guard let spaceRecord = getRecordOfActiveSpace() else { return nil }
     return spaceRecord
   }
@@ -108,24 +108,24 @@ final class AirSpaceMananger: ObservableObject {
       contentRect: NSRect(
         x: 0,
         y: 0,
-        width: 100,
-        height: 100
+        width: 1,
+        height: 1
       ),
       styleMask: [.borderless],
       backing: .buffered,
       defer: false
     )
-    //    anchorWindow.collectionBehavior = [
-    //      .ignoresCycle,
-    //      .fullScreenNone,
-    //      .stationary,
-    //      .auxiliary,
-    //    ]
-    anchorWindow.backgroundColor = .red
-    //    anchorWindow.backgroundColor = .clear
-    //    anchorWindow.isOpaque = false
-    //    anchorWindow.ignoresMouseEvents = true
-    //    anchorWindow.hasShadow = false
+    anchorWindow.collectionBehavior = [
+      .ignoresCycle,
+      .fullScreenNone,
+      .stationary,
+      .auxiliary,
+    ]
+    //    anchorWindow.backgroundColor = .red
+    anchorWindow.backgroundColor = .clear
+    anchorWindow.isOpaque = false
+    anchorWindow.ignoresMouseEvents = true
+    anchorWindow.hasShadow = false
     anchorWindow.orderFrontRegardless()
     do {
       guard getActiveSpaceWindows().count == 1 else {
@@ -176,6 +176,19 @@ final class AirSpaceMananger: ObservableObject {
     return savePath
   }
 
+  func checkIfDiskDataExists() -> Bool {
+    do {
+      let savePath = try getDiskSavePath()
+      let filePath = savePath.path(percentEncoded: false)
+      let fileManager = FileManager.default
+      return fileManager.fileExists(atPath: filePath)
+    }
+    catch {
+      print("Could not get disk save path: \(error.localizedDescription)")
+      return false
+    }
+  }
+  
   func saveRecordsToDisk() {
     do {
       let savePath = try getDiskSavePath()

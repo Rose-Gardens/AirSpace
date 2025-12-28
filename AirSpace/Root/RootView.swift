@@ -7,23 +7,31 @@
 
 import SwiftUI
 
-enum Screen: Hashable {
-  case onboarding, switcher
-}
-
 struct RootView: View {
-  @State private var curScreen: Screen = .onboarding
+
+  @EnvironmentObject private var appDelegate: AppDelegate
+
   var body: some View {
+
+    let curScreen = appDelegate.rootViewState
+
     ZStack {
       switch curScreen {
       case .onboarding:
         OnboardingRootView()
-          .transition(.move(edge: .leading))
       case .switcher:
         OnboardingRootView()
-          .transition(.move(edge: .trailing))
+      case .repairAnchor:
+        RepairAnchor()
       }
     }
+    .frame(
+      maxWidth: .infinity,
+      minHeight: 400,
+      maxHeight: 400,
+      alignment: .topLeading
+    )
+    .padding(.all, 16)
     .animation(.easeInOut, value: curScreen)
     .environmentObject(AirSpaceMananger.shared)
     .environmentObject(AppSettings.shared)

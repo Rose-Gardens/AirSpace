@@ -14,7 +14,7 @@ enum Content {
 struct OnboardingRootView: View {
 
   @Environment(\.openSettings) private var openSettings
-  
+
   @State private var curContent: Content = .firstTime
 
   var body: some View {
@@ -73,25 +73,20 @@ struct OnboardingRootView: View {
           switch curContent {
           case .firstTime:
             OnboardingWelcomeView(curContent: $curContent)
-              .transition(.opacity)
           case .setup:
             OnboardingSetupView(curContent: $curContent)
-              .transition(.opacity)
           case .recording:
             OnboardingRecordingView(curContent: $curContent)
-              .transition(.opacity)
           }
 
         }
         .padding(.vertical, 16)
       }
-      .animation(.easeInOut(duration: 0.25), value: curContent)
+      .animation(.easeInOut, value: curContent)
       Spacer()
       Divider()
         .padding(.bottom, 8)
       MenuPanel(items: onboardingMenuItems)
     }
-    .frame(maxWidth: .infinity, maxHeight: 400, alignment: .topLeading)
-    .padding(.all, 16)
   }
 }
