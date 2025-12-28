@@ -149,7 +149,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
 
   func panelBackgroundAndContent() -> NSView {
     // Returns liquid glass as NSPanel background if macOS >= 26, else visEff as fallback
-    if #available(macOS 29.0, *) {
+    if #available(macOS 26.0, *) {
       let visualEffect = NSGlassEffectView()
       visualEffect.cornerRadius = 24
       visualEffect.style = .regular
