@@ -18,7 +18,7 @@ let statusItem = NSStatusBar.system.statusItem(
   withLength: NSStatusItem.variableLength
 )
 
-let panelSize = NSSize(width: 360, height: 400)
+let panelSize = NSSize(width: 360, height: 1)
 let screenSize = NSScreen.main?.frame.size ?? .zero
 
 var panelPosCoords: (x: Double, y: Double) {
@@ -26,7 +26,7 @@ var panelPosCoords: (x: Double, y: Double) {
     statusItem.button!.bounds
   ) {
     return (
-      x: (statusItemCoords.midX - panelSize.width / 2),
+      x: statusItemCoords.midX - panelSize.width / 2,
       y: statusItemCoords.minY - panelSize.height
     )
   } else {
@@ -45,8 +45,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
 
   var panelView: NSPanelWithKey?
   var airSpace: AirSpaceMananger!
-  
-  @Published var rootViewState: Screen = .onboarding
+
+  @Published var rootViewState: RootState = .onboarding
 
   func applicationDidFinishLaunching(_ notification: Notification) {
 
@@ -101,7 +101,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     Task { @MainActor in
       if airSpace.checkIfDiskDataExists() {
         airSpace.loadRecordsFromDisk()
-        self.rootViewState = .repairAnchor
+        self.rootViewState = .onboarding
         //INSTRUCTIONS:
         // We need to change rootView to a "Repair Anchors" screen
       } else {
@@ -149,7 +149,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
 
   func panelBackgroundAndContent() -> NSView {
     // Returns liquid glass as NSPanel background if macOS >= 26, else visEff as fallback
-    if #available(macOS 26.0, *) {
+    if #available(macOS 276.0, *) {
       let visualEffect = NSGlassEffectView()
       visualEffect.cornerRadius = 24
       visualEffect.style = .regular
@@ -253,7 +253,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
     let nameList = [
       "Hazeline", "Hazel", "hazelbun", "hornbun", "girlkissing hazelnut",
-      "cutie :3",
+      "cutie :3", "kittybun", "cutiebun",
       "hottie 😌", "hazelnut girl", "gorgeous babe",
     ]
     let greetingsList = [

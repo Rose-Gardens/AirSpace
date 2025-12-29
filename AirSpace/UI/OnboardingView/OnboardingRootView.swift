@@ -13,33 +13,10 @@ enum Content {
 
 struct OnboardingRootView: View {
 
-  @Environment(\.openSettings) private var openSettings
-
   @State private var curContent: Content = .firstTime
 
   var body: some View {
     let isSetup = (curContent == .setup)
-    let onboardingMenuItems: [MenuItem] = [
-      .init(
-        title: "Preferences",
-        shortcutTitle: "⌘ ,",
-        shortcut: KeyEquivalent(","),
-        action: {
-          openSettings()
-          // NSApp means NSApplication.shared
-          // Bring settings window to the front after opening.
-          NSApp.activate()
-        }
-      ),
-      .init(
-        title: "Quit AirSpace",
-        shortcutTitle: "⌘ Q",
-        shortcut: KeyEquivalent("Q"),
-        action: {
-          NSApp.terminate(nil)
-        }
-      ),
-    ]
 
     // ------------ View Returned Below -------------
 
@@ -66,7 +43,6 @@ struct OnboardingRootView: View {
           .font(.system(size: 20))
       }
       Divider()
-      Spacer()
       ZStack {
         VStack(spacing: 16) {
 
@@ -83,10 +59,6 @@ struct OnboardingRootView: View {
         .padding(.vertical, 16)
       }
       .animation(.easeInOut, value: curContent)
-      Spacer()
-      Divider()
-        .padding(.bottom, 8)
-      MenuPanel(items: onboardingMenuItems)
     }
     // TODO: You can programmatically change the height using a fn!!
     .frame(
@@ -95,6 +67,5 @@ struct OnboardingRootView: View {
       maxHeight: 400,
       alignment: .topLeading
     )
-    .padding(.all, 16)
   }
 }
