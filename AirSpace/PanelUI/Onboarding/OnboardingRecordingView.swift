@@ -42,8 +42,8 @@ struct OnboardingRecordingView: View {
       airSpace.saveRecordsToDisk()
 
       curContent = .setup
-      print(airSpace.spaceListPerDisplay)
-      print(airSpace.spacePerAnchor)
+      print("LOG INFO: \(airSpace.spaceListPerDisplay)")
+      print("LOG INFO: \(airSpace.spacePerAnchor)")
     }
     .padding(.top, 16)
   }

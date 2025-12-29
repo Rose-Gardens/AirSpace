@@ -88,5 +88,13 @@ struct OnboardingRootView: View {
         .padding(.bottom, 8)
       MenuPanel(items: onboardingMenuItems)
     }
+    // TODO: You can programmatically change the height using a fn!!
+    .frame(
+      maxWidth: .infinity,
+      minHeight: 400,
+      maxHeight: 400,
+      alignment: .topLeading
+    )
+    .padding(.all, 16)
   }
 }

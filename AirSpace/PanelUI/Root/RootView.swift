@@ -25,13 +25,6 @@ struct RootView: View {
         RepairAnchor()
       }
     }
-    .frame(
-      maxWidth: .infinity,
-      minHeight: 400,
-      maxHeight: 400,
-      alignment: .topLeading
-    )
-    .padding(.all, 16)
     .animation(.easeInOut, value: curScreen)
     .environmentObject(AirSpaceMananger.shared)
     .environmentObject(AppSettings.shared)
