@@ -45,12 +45,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
 
   var panelView: NSPanelWithKey?
   var airSpace: AirSpaceMananger!
-
-  @Published var rootViewState: RootState = .onboarding
+  var appState: AppState!
 
   func applicationDidFinishLaunching(_ notification: Notification) {
 
     let appSettings = AppSettings.shared
+    appState = AppState.shared
     airSpace = AirSpaceMananger.shared
 
     // Had to resort to Gemini for the next 7 lines 😔
@@ -101,9 +101,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     Task { @MainActor in
       if airSpace.checkIfDiskDataExists() {
         airSpace.loadRecordsFromDisk()
-        self.rootViewState = .onboarding
+        appState.activeRootState = .onboarding
         //INSTRUCTIONS:
-        // We need to change rootView to a "Repair Anchors" screen
+        // We need to have a user setting for dont show again restart notice
+        appState.activeOnboardingState = .noticeRestart
       } else {
         print("No records.json exists. User will need to do a clean setup.")
       }
@@ -149,7 +150,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
 
   func panelBackgroundAndContent() -> NSView {
     // Returns liquid glass as NSPanel background if macOS >= 26, else visEff as fallback
-    if #available(macOS 276.0, *) {
+    if #available(macOS 26.0, *) {
       let visualEffect = NSGlassEffectView()
       visualEffect.cornerRadius = 24
       visualEffect.style = .regular
@@ -243,12 +244,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     var timeGreeting: String {
       let hour = Calendar.current.component(.hour, from: Date())
       switch hour {
-      case 0..<12:
-        return "Morning"
+      case 7..<12:
+        return "Good Morning,"
       case 12..<17:
-        return "Afternoon"
+        return "Good Afternoon,"
+      case 23...24, 0..<7:
+        return "Hey sleepybun 😌🐰 :3, My"
       default:
-        return "Evening"
+        return "Good Evening,"
       }
     }
     let nameList = [
@@ -262,7 +265,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
       "My little bunbun girl 🥺", "You're adorable, you know that? :)",
     ]
     print(
-      "Good \(timeGreeting), \(nameList.randomElement() ?? "")! \(greetingsList.randomElement() ?? "")"
+      "\(timeGreeting) \(nameList.randomElement() ?? "")! \(greetingsList.randomElement() ?? "")"
     )
     print("I'm a trans cutie-pie! 🏳️‍⚧️😌💖")
   }
