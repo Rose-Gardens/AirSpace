@@ -13,19 +13,8 @@ struct RootView: View {
   @Environment(\.openSettings) private var openSettings
 
   var body: some View {
-
     let rootViewState = appDelegate.rootViewState
     let menuItems = [
-      MenuItem(
-        title: "Redo Setup...",
-        shortcutTitle: "⌘ R",
-        shortcut: KeyEquivalent("R"),
-        action: {
-          // TODO:
-          //INSTRUCTIONS:
-          // Set AppState to Setup State
-        }
-      ),
       MenuItem(
         title: "Preferences",
         shortcutTitle: "⌘ ,",
@@ -60,8 +49,14 @@ struct RootView: View {
         .padding(.bottom, 8)
       MenuPanel(items: menuItems)
     }
-    .background(Color.teal)
-        .padding(.all, 16)
+    // TODO: Test this out
+    .frame(
+      maxWidth: .infinity,
+      minHeight: 440,
+      maxHeight: 1200,
+      alignment: .topLeading
+    )
+    .padding(.all, 16)
     .animation(.easeInOut, value: rootViewState)
     .environmentObject(AirSpaceMananger.shared)
     .environmentObject(AppSettings.shared)
