@@ -9,11 +9,10 @@ import SwiftUI
 
 struct RootView: View {
 
-  @EnvironmentObject private var appDelegate: AppDelegate
+  @EnvironmentObject private var appState: AppState
   @Environment(\.openSettings) private var openSettings
 
   var body: some View {
-    let rootViewState = appDelegate.rootViewState
     let menuItems = [
       MenuItem(
         title: "Preferences",
@@ -37,12 +36,7 @@ struct RootView: View {
     ]
     VStack {
       ZStack {
-        switch rootViewState {
-        case .onboarding:
-          OnboardingRootView()
-        case .switcher:
-          OnboardingRootView()
-        }
+        appState.getRootContentView()
       }
       Spacer()
       Divider()
@@ -57,7 +51,6 @@ struct RootView: View {
       alignment: .topLeading
     )
     .padding(.all, 16)
-    .animation(.easeInOut, value: rootViewState)
     .environmentObject(AirSpaceMananger.shared)
     .environmentObject(AppSettings.shared)
   }
