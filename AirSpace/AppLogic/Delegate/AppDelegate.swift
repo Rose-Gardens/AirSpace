@@ -46,15 +46,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
   var panelView: NSPanelWithKey?
   var airSpace: AirSpaceMananger!
   var appState: AppState!
+  var appSettings: AppSettings!
 
   func applicationDidFinishLaunching(_ notification: Notification) {
 
-    let appSettings = AppSettings.shared
+    appSettings = AppSettings.shared
     appState = AppState.shared
     airSpace = AirSpaceMananger.shared
 
-    // Had to resort to Gemini for the next 7 lines 😔
-    let rootView = RootView().environmentObject(self)
+    // Had to resort to Gemini for the next 10ish lines 😔
+    let rootView = RootView()
+      .environmentObject(self)
+      .environmentObject(appState)
+    
     self.panelContentController = NSHostingController(
       rootView: AnyView(rootView)
     )
@@ -67,6 +71,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     airSpace.transPride(with: "🏳️‍⚧️")
 
     appSettings.registerUserDefaults()
+    appSettings.loadSettings()
     loadDiskData()
 
     statusItem.button?.title = "AirSpace..."
@@ -86,29 +91,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
       name: NSWorkspace.activeSpaceDidChangeNotification,
       object: nil,
     )
-
-    appSettings.loadSettings()
   }
 
+  @MainActor
   @objc func spaceChangeHandler() {
-    Task { @MainActor in
-      guard let spaceRecord = airSpace.onSpaceChange() else { return }
-      statusItem.button?.title = spaceRecord.customName
-    }
-  }
-
-  func loadDiskData() {
-    Task { @MainActor in
-      if airSpace.checkIfDiskDataExists() {
-        airSpace.loadRecordsFromDisk()
-        appState.activeRootState = .onboarding
-        //INSTRUCTIONS:
-        // We need to have a user setting for dont show again restart notice
-        appState.activeOnboardingState = .noticeRestart
-      } else {
-        print("No records.json exists. User will need to do a clean setup.")
-      }
-    }
+    guard let spaceRecord = airSpace.onSpaceChange() else { return }
+    statusItem.button?.title = spaceRecord.customName
   }
 
   @objc func showPanel() {
@@ -238,6 +226,49 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
   func activatePanelAndBringToFront() {
     NSApp.activate()
     panelView?.makeKeyAndOrderFront(nil)
+  }
+
+  @MainActor
+  func loadDiskData() {
+    appState.activeRootState = .onboarding
+
+    if appSettings.isFirstTimeSetup {
+      appState.activeOnboardingState = .firstOpen
+      return
+    }
+
+    let hasDiskData = airSpace.checkIfDiskDataExists()
+    if hasDiskData {
+      airSpace.loadRecordsFromDisk()
+    }
+
+    if !appSettings.wontShowRestartNoticeAgain {
+      appState.activeOnboardingState = .noticeRestart
+      return
+    }
+
+    shouldShowOnRestartChoiceUI()
+
+  }
+
+  @MainActor
+  func shouldShowOnRestartChoiceUI() {
+    let hasDiskData = airSpace.checkIfDiskDataExists()
+    if !hasDiskData {
+      print(
+        "LOG INFO: No records.json exists. User will need to do a clean setup."
+      )
+      appState.activeOnboardingState = .setupCleanStart
+      return
+    }
+
+    if !appSettings.userHasMadeOnRestartChoice {
+      appState.activeOnboardingState = .noticeKeepNames
+    } else if appSettings.willKeepNamesOnRestart {
+      appState.activeOnboardingState = .setupKeepNamesStart
+    } else {
+      appState.activeOnboardingState = .setupCleanStart
+    }
   }
 
   func transCutie() {
