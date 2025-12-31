@@ -28,6 +28,7 @@ enum SwitcherState: Hashable {
   case gridView
 }
 
+@MainActor
 final class AppState: ObservableObject {
 
   // The singleton shared object ----
@@ -53,89 +54,39 @@ final class AppState: ObservableObject {
     self.activeSwitcherState = activeSwitcherState
   }
 
-  let onboardingDefaultCase = OnboardingDataModel(
-    id: UUID(),
-    title: "Welcome to AirSpace!",
-    subtitle: "Welcome! Glad you’re here 💖",
-    contentView: FirstOpenView()
-  )
-
-  func getRootContentView(
-    activeRootState: RootState,
-    activeSwitcherState: SwitcherState
-  ) -> any View {
-    switch activeRootState {
+  @ViewBuilder
+  func getRootContentView() -> some View {
+    switch self.activeRootState {
     case .onboarding:
-      return OnboardingRootView()
+      OnboardingRootView()
     case .switcher:
-      switch activeSwitcherState {
+      switch self.activeSwitcherState {
       case .listView:
-        return SwitcherListView()
+        SwitcherListView()
       case .gridView:
-        return SwitcherGridView()
+        SwitcherGridView()
       }
     }
   }
 
-  func getOnboardingContentData(
-    activeRootState: RootState,
-    activeOnboardingState: OnboardingState
-  ) -> OnboardingDataModel {
-    switch activeRootState {
-    case .onboarding:
-      switch activeOnboardingState {
-      case .firstOpen:
-        return .init(
-          id: UUID(),
-          title: "Welcome to AirSpace!",
-          subtitle: "Welcome! Glad you’re here 💖",
-          contentView: FirstOpenView()
-        )
-      case .noticeRestart:
-        return .init(
-          id: UUID(),
-          title: "AirSpace Restart Notice",
-          subtitle: "AirSpace has been restarted.",
-          contentView: RestartNotice()
-        )
-      case .noticeKeepNames:
-        return .init(
-          id: UUID(),
-          title: "Keep Previous Space Names?",
-          subtitle: "AirSpace has saved your previous space names.",
-          contentView: KeepNamesNotice()
-        )
-      case .setupKeepNamesStart:
-        return .init(
-          id: UUID(),
-          title: "Setup AirSpace (Keep Names)",
-          subtitle: "Steps:",
-          contentView: SetupStartView()
-        )
-      case .setupKeepNamesStop:
-        return .init(
-          id: UUID(),
-          title: "Capturing Spaces Started...",
-          subtitle: "Steps:",
-          contentView: SetupStopView()
-        )
-      case .setupCleanStart:
-        return .init(
-          id: UUID(),
-          title: "Setup AirSpace (New Setup)",
-          subtitle: "Steps:",
-          contentView: SetupStartView()
-        )
-      case .setupCleanStop:
-        return .init(
-          id: UUID(),
-          title: "Capturing Spaces Started...",
-          subtitle: "Steps:",
-          contentView: SetupStopView()
-        )
-      }
-    default:
-      return onboardingDefaultCase
+  @ViewBuilder
+  func getOnboardingContentView() -> some View {
+    switch self.activeOnboardingState {
+    case .firstOpen:
+      FirstOpenView()
+    case .noticeRestart:
+      RestartNotice()
+    case .noticeKeepNames:
+      KeepNamesNotice()
+    case .setupKeepNamesStart:
+      SetupStartView()
+    case .setupKeepNamesStop:
+      SetupStopView()
+    case .setupCleanStart:
+      SetupStartView()
+    case .setupCleanStop:
+      SetupStopView()
     }
+
   }
 }
