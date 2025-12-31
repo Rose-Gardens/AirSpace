@@ -20,7 +20,16 @@ final class AppSettings: ObservableObject {
     ),
     willAutoCreateRecordInNormalMode: UserDefaults.standard.bool(
       forKey: "willAutoCreateRecordInNormalMode"
-    )
+    ),
+    wontShowRestartNoticeAgain: UserDefaults.standard.bool(
+      forKey: "wontShowRestartNoticeAgain"
+    ),
+    userHasMadeOnRestartChoice: UserDefaults.standard.bool(
+      forKey: "userHasMadeOnRestartChoice"
+    ),
+    willKeepNamesOnRestart: UserDefaults.standard.bool(
+      forKey: "willKeepNamesOnRestart"
+    ),
   )
 
   // The properties of the class ----
@@ -42,24 +51,58 @@ final class AppSettings: ObservableObject {
       )
     }
   }
+  @Published var wontShowRestartNoticeAgain: Bool {
+    didSet {
+      UserDefaults.standard.set(
+        wontShowRestartNoticeAgain,
+        forKey: "wontShowRestartNoticeAgain"
+      )
+    }
+  }
+  @Published var userHasMadeOnRestartChoice: Bool {
+    didSet {
+      UserDefaults.standard.set(
+        userHasMadeOnRestartChoice,
+        forKey: "userHasMadeOnRestartChoice"
+      )
+    }
+  }
+  @Published var willKeepNamesOnRestart: Bool {
+    didSet {
+      UserDefaults.standard.set(
+        willKeepNamesOnRestart,
+        forKey: "willKeepNamesOnRestart"
+      )
+    }
+  }
 
   // The constructor of the class (accessed only by 'shared') ----
   private init(
     willLaunchAtLogin: Bool,
     isFirstTimeSetup: Bool,
-    willAutoCreateRecordInNormalMode: Bool
+    willAutoCreateRecordInNormalMode: Bool,
+    wontShowRestartNoticeAgain: Bool,
+    userHasMadeOnRestartChoice: Bool,
+    willKeepNamesOnRestart: Bool,
   ) {
     self.willLaunchAtLogin = willLaunchAtLogin
     self.isFirstTimeSetup = isFirstTimeSetup
     self.willAutoCreateRecordInNormalMode = willAutoCreateRecordInNormalMode
+    self.wontShowRestartNoticeAgain = wontShowRestartNoticeAgain
+    self.userHasMadeOnRestartChoice = userHasMadeOnRestartChoice
+    self.willKeepNamesOnRestart = willKeepNamesOnRestart
   }
 
   // --------------- *Methods of AppSettings* ----------------
 
   func registerUserDefaults() {
     let defaultSettings = [
-      "isFirstTimeSetup": "true", "willLaunchAtLogin": "false",
+      "isFirstTimeSetup": "true",
+      "willLaunchAtLogin": "false",
       "willAutoCreateRecordInNormalMode": "false",
+      "wontShowRestartNoticeAgain": "false",
+      "userHasMadeOnRestartChoice": "false",
+      "willKeepNamesOnRestart": "true",
     ]
     UserDefaults.standard.register(defaults: defaultSettings)
     let nc = NotificationCenter.default
@@ -81,6 +124,15 @@ final class AppSettings: ObservableObject {
     )
     self.willAutoCreateRecordInNormalMode = UserDefaults.standard.bool(
       forKey: "willAutoCreateRecordInNormalMode"
+    )
+    self.wontShowRestartNoticeAgain = UserDefaults.standard.bool(
+      forKey: "wontShowRestartNoticeAgain"
+    )
+    self.userHasMadeOnRestartChoice = UserDefaults.standard.bool(
+      forKey: "userHasMadeOnRestartChoice"
+    )
+    self.willKeepNamesOnRestart = UserDefaults.standard.bool(
+      forKey: "willKeepNamesOnRestart"
     )
   }
 
